@@ -22,7 +22,7 @@ jobs:
             - name: "Build wheel"
               run: "poetry build"
             - name: "Create release"
-              uses: "softprops/action-gh-release@v1"
+              uses: "softprops/action-gh-release@v2"
               with:
                   files: "dist/*"
                   generate_release_notes: true

@@ -47,7 +47,7 @@ async def permission_check(
     authentication = request.headers.get("Authentication")
     if authentication and check_auth(authentication):
         return await handler(request)
-    raise web.HTTPForbidden
+    raise web.HTTPForbidden(text="Authenticate failed")
 
 
 @web.middleware

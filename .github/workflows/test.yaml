@@ -1,0 +1,33 @@
+name: "Run tests"
+on:
+    push:
+        branches:
+            - "main"
+    pull_request:
+        branches:
+            - "main"
+    workflow_dispatch:
+
+jobs:
+    test:
+        name: "Run tests"
+        strategy:
+            matrix:
+                os:
+                    - "windows-latest"
+                    - "ubuntu-latest"
+                    - "macos-latest"
+        runs-on: ${{ matrix.os }}
+        steps:
+            - name: "Checkout"
+              uses: "actions/checkout@v4"
+            - name: "Setup python"
+              uses: "actions/setup-python@v5"
+              with:
+                  python-version: "3.11"
+            - name: "Setup poetry"
+              uses: "Gr1N/setup-poetry@v8"
+            - name: "Install depends"
+              run: "poetry install --with=dev"
+            - name: "Run pytest"
+              run: "poetry run pytest --cov=e5renewer --ruff --ruff-format"

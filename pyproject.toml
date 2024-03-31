@@ -1,0 +1,144 @@
+[tool.poetry]
+name = "e5renewer"
+version = "0.1.0"
+description = "Renew Microsoft 365 E5 Subscription automatically."
+authors = ["Zhang Hua <zhanghua.00@qq.com>"]
+readme = "README.md"
+packages = [{include = "e5renewer"}]
+
+[tool.poetry.scripts]
+e5renewer = "e5renewer:main"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<4.0"
+msgraph-sdk = "^1.0.0"
+aiohttp = "^3.9.3"
+pyyaml = "^6.0.1"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pytest-asyncio = "^0.21.1"
+pytest-cov = "^4.1.0"
+pytest-ruff = "^0.3.1"
+tomli-w = "^1.0.0"
+pytest-aiohttp = "^1.0.5"
+
+[tool.pyright]
+venvPath="."
+venv=".venv"
+reportMissingImports = true
+pythonPlatform = "All"
+typeCheckingMode = "strict"
+useLibraryCodeForTypes = true
+# diagnostic rules
+strictListInference = true
+strictDictionaryInference = true
+strictSetInference = true
+reportMissingTypeStubs = "warning"
+reportImportCycles = true
+reportUninitializedInstanceVariable = "warning"
+reportCallInDefaultInitializer = "warning"
+reportImplicitStringConcatenation = true
+reportUnusedCallResult = "information"
+reportUnnecessaryTypeIgnoreComment = "information"
+reportImplicitOverride = "information"
+reportShadowedImports = "information"
+
+[tool.pytest.ini_options]
+addopts = "--cov=e5renewer --ruff"
+required_plugins = "pytest-ruff pytest-cov pytest-aiohttp"
+
+[tool.ruff]
+builtins = ["_"]
+line-length = 100
+extend-exclude = ["__pycache__"]
+output-format = "github"
+required-version = ">=0.3.4"
+target-version = "py311"
+
+[tool.ruff.lint]
+preview = true
+select = [
+    "F", # Pyflakes
+    "E", "W", # pycodestyle, Error, Warning
+    "I", # isort
+    "N", # pep8-naming
+    "D", # pydocstyle
+    "ANN", # flake8-annotations
+    "ASYNC", # flake8-async
+    "S", # flake8-bandit
+    "B", # flake8-bugbear
+    "A", # flake8-builtins
+    "COM", # flake8-commas
+    "C4", # flake8-comprehensions
+    "ISC", # flake8-implicit-str-concat
+    "T20", # flake8-print
+    "PT", # flake8-pytest-style
+    "Q", # flake8-quotes
+    "RSE", # flake8-raise
+    "RET", # flake8-return
+    "SIM", # flake8-simplify
+    "ARG", # flake8-unused-arguments
+    "PTH", # flake8-use-pathlib
+    "FIX", # flake8-fixme
+    "ERA", # eradicate
+    "PL", # Pylint
+    "R", # Refactor
+    "FLY", # flynt
+    "FURB", # refurb
+    "LOG", # flake8-logging
+    "RUF" # Ruff specific
+]
+ignore = [
+    "ANN101", # type for self
+    "ANN102", # type for cls
+    "PLW0603", # global statements
+    "S311", # random is not secure
+    "FIX002" # todo is not critical
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Any in exec_method_safe
+"e5renewer/processor/__init__.py" = ["ANN401"]
+# from ... import *
+"e5renewer/processor/msapis/__init__.py" = ["F403"]
+# pyright is not happy when using i.attr
+"e5renewer/processor/msapis/_caller.py" = ["B009"]
+# return type is clear
+"e5renewer/processor/msapis/_get.py" = ["ANN202"]
+# Any in invoke
+"e5renewer/processor/statistic/_method.py" = ["ANN401"]
+# pyright is not happy when using i.attr
+"e5renewer/sdk/_module.py" = ["B010"]
+# tests are usually using assert and private objects
+# pyright is not happy when using i.attr
+# test __eq__ function should not be changed to ==
+"tests/**.py" = ["S101", "PLC2701","B010", "PLC2801"]
+
+[tool.ruff.lint.flake8-annotations]
+allow-star-arg-any = true
+mypy-init-return = true
+suppress-dummy-args = true
+suppress-none-returning = true
+
+[tool.ruff.lint.isort]
+force-single-line = true
+length-sort = true
+lines-after-imports = 2
+no-sections = true
+
+[tool.ruff.lint.pycodestyle]
+max-doc-length = 100
+max-line-length = 100
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

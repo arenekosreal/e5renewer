@@ -1,0 +1,9 @@
+dist
+pyrightconfig.json
+typings
+__pycache__
+.pytest_cache
+.coverage
+.venv
+.ruff_cache
+config.json

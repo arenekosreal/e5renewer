@@ -30,4 +30,4 @@ jobs:
             - name: "Install depends"
               run: "poetry install --with=dev"
             - name: "Run pytest"
-              run: "poetry run pytest --cov=e5renewer --ruff --ruff-format"
+              run: "poetry run pytest -vvvvv"

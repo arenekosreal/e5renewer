@@ -19,4 +19,4 @@ def check_auth(authentication: str) -> bool:
 
 def check_outdate(timestamp: int) -> bool:
     timestamp_now = int(time.time() * 1000)
-    return 0 < timestamp_now - timestamp <= MAX_FIXUP * 1000
+    return timestamp > 0 and (0 < timestamp_now - timestamp <= MAX_FIXUP * 1000)

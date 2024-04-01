@@ -81,8 +81,8 @@ async def timestamp_check(
                 if check_outdate(timestamp):
                     return await handler(request)
                 raise web.HTTPForbidden(text="Request is outdated")
-        case _:
-            raise web.HTTPBadRequest
+        case method:
+            raise web.HTTPMethodNotAllowed(method, ["GET", "POST"])
 
 
 @_routes.get("/v1/{name}")

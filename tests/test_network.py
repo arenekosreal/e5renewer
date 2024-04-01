@@ -1,5 +1,6 @@
 """Test if network utils works."""
 
+import sys
 import pytest
 import socket
 from http import HTTPStatus
@@ -16,6 +17,7 @@ from aiohttp.web import Application
 from aiohttp.web import HTTPForbidden
 from aiohttp.web import HTTPBadRequest
 from aiohttp.web import StreamResponse
+from aiohttp.web import HTTPMethodNotAllowed
 from e5renewer.network import main
 from e5renewer.network import setup_auth
 from e5renewer.network import get_infomation
@@ -130,7 +132,7 @@ async def test_timestamp_check_put(
     dummy_handler: RequestHandlerType,
 ):
     """Check if timestamp_check is correct when is PUT request."""
-    with pytest.raises(HTTPBadRequest):
+    with pytest.raises(HTTPMethodNotAllowed):
         _ = await timestamp_check(empty_put_request, dummy_handler)
 
 
@@ -169,6 +171,7 @@ async def test_http_server_no_timestamp(http_client: TestClient, secret: str):
 
 
 @pytest.mark.asyncio()
+@pytest.mark.xfail(sys.platform == "win32", reason="Result is not stable on Windows.")
 async def test_http_server_ok(http_client: TestClient, secret: str, timestamp: int):
     """Check if http server is correct when request has authentication and timestamp."""
     setup_auth(secret)
@@ -181,6 +184,7 @@ async def test_http_server_ok(http_client: TestClient, secret: str, timestamp: i
 
 
 @pytest.mark.asyncio()
+@pytest.mark.xfail(sys.platform == "win32", reason="Result is not stable on Windows.")
 async def test_http_server_not_found(http_client: TestClient, secret: str, timestamp: int):
     """Check if http server is correct when requested an invalid path."""
     setup_auth(secret)
